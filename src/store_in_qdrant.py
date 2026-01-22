@@ -43,13 +43,17 @@ if __name__ == "__main__":
     collection_name = "atomic_habits_book"
 
     # Create / reset collection
-    client.recreate_collection(
-        collection_name=collection_name,
-        vectors_config=VectorParams(
-            size=embeddings.shape[1],
-            distance=Distance.COSINE
+
+    if not client.collection_exists(collection_name):
+        client.create_collection(
+            collection_name=collection_name,
+            vectors_config=VectorParams(
+                size=embeddings.shape[1],
+                distance=Distance.COSINE
+            )
         )
-    )
+    else:
+        print(f"ℹ️ Collection '{collection_name}' already exists")
 
     # Prepare points
     points = []
